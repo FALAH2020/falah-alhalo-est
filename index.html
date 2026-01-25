@@ -13,26 +13,77 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
         body { background-color: var(--black-bg); color: var(--white); overflow-x: hidden; }
 
-        /* الخلفية والنصوص المتحركة */
+        /* ============ تعديل الخلفية (نظام عرض الصور المحلي) ============ */
         .hero-bg {
             height: 100vh;
-            background: linear-gradient(-45deg, #0c0c0c, #001a33, #0d0d0d, #1a1a1a);
-            background-size: 400% 400%;
-            animation: gradientMove 12s ease infinite;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: var(--black-bg);
+            
+            /* الأنيميشن الخاص بالخلفية */
+            animation: imageCycle 18s infinite ease-in-out;
+            
+            /* إعدادات التموضع */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
-        @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        .text-slider { height: 100px; overflow: hidden; position: relative; width: 90%; }
-        .text-slider div { position: absolute; width: 100%; opacity: 0; animation: slideText 12s infinite; color: var(--gold); font-family: 'Amiri', serif; font-size: 2.8rem; }
+        /* هام جداً:
+           تأكد أن الصور موجودة في مجلد اسمه images
+           وأن أسماء الصور هي villa.jpg و tower.jpg و interior.jpg
+        */
+        @keyframes imageCycle {
+            0% {
+                /* الصورة الأولى: فيلا */
+                background-image: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,20,40,0.8)), 
+                                  url('images/villa.jpg');
+                background-size: 100% auto;
+            }
+            10% { background-size: 105% auto; } /* زوم خفيف */
+            
+            33% {
+                /* الصورة الثانية: برج */
+                background-image: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,20,40,0.8)), 
+                                  url('images/tower.jpg');
+                background-size: 100% auto;
+            }
+            43% { background-size: 105% auto; }
+
+            66% {
+                /* الصورة الثالثة: ديكور داخلي */
+                background-image: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,20,40,0.8)), 
+                                  url('images/interior.jpg');
+                background-size: 100% auto;
+            }
+            76% { background-size: 105% auto; }
+
+            100% {
+                /* العودة للأولى */
+                background-image: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,20,40,0.8)), 
+                                  url('images/villa.jpg');
+                background-size: 100% auto;
+            }
+        }
+        /* ============================================================ */
+
+        /* باقي التنسيقات كما هي */
+        .text-slider { height: 100px; overflow: hidden; position: relative; width: 90%; z-index: 2; }
+        .text-slider div { position: absolute; width: 100%; opacity: 0; animation: slideText 12s infinite; color: var(--gold); font-family: 'Amiri', serif; font-size: 2.8rem; text-shadow: 2px 2px 8px #000; }
         .text-slider div:nth-child(2) { animation-delay: 4s; }
         .text-slider div:nth-child(3) { animation-delay: 8s; }
         @keyframes slideText { 0% { opacity: 0; transform: translateY(20px); } 5% { opacity: 1; transform: translateY(0); } 30% { opacity: 1; transform: translateY(0); } 35% { opacity: 0; transform: translateY(-20px); } 100% { opacity: 0; } }
 
-        header { background: rgba(12, 12, 12, 0.9); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--gold); position: fixed; width: 100%; top: 0; z-index: 1000; }
+        header { background: rgba(12, 12, 12, 0.95); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--gold); position: fixed; width: 100%; top: 0; z-index: 1000; }
         .logo { font-family: 'Amiri', serif; font-size: 2rem; color: var(--gold); border: 2px solid var(--gold); padding: 0 10px; }
         nav ul { display: flex; list-style: none; gap: 20px; }
-        nav ul li a { color: var(--white); text-decoration: none; font-weight: bold; cursor: pointer; }
+        nav ul li a { color: var(--white); text-decoration: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        nav ul li a:hover { color: var(--gold); }
 
         .page { display: none; padding: 120px 5% 50px; min-height: 100vh; }
         .page.active { display: block; animation: fadeIn 0.8s ease; }
@@ -47,16 +98,12 @@
         .service-card ul li::before { content: "• "; color: var(--gold); }
 
         .info-box { background: #222; padding: 30px; border-radius: 15px; border-right: 5px solid var(--gold); margin-bottom: 40px; }
-        .info-box p { margin-bottom: 10px; font-size: 1.1rem; }
-
-        .social-icons { display: flex; gap: 20px; margin-top: 30px; }
-        .social-icons a { color: var(--gold); font-size: 2rem; transition: 0.3s; }
-        .social-icons a:hover { color: #fff; transform: scale(1.2); }
-
+        .social-icons { display: flex; gap: 25px; margin-top: 30px; z-index: 2; }
+        .social-icons a { color: var(--gold); font-size: 2.2rem; transition: 0.3s; }
+        
         .form-card { background: var(--card-bg); border: 1px solid var(--gold); padding: 30px; border-radius: 20px; max-width: 600px; margin: 0 auto; }
         input, textarea { width: 100%; padding: 12px; margin-bottom: 15px; background: #111; border: 1px solid #444; color: #fff; border-radius: 8px; }
         .btn { width: 100%; padding: 15px; background: var(--gold); border: none; font-weight: bold; cursor: pointer; border-radius: 8px; font-size: 1.1rem; }
-
         .wa-float { position: fixed; bottom: 30px; left: 30px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 30px; z-index: 1000; }
     </style>
 </head>
@@ -74,14 +121,14 @@
         </nav>
     </header>
 
-    <section id="home" class="page active">
+    <section id="home" class="page active" style="padding: 0;">
         <div class="hero-bg">
             <div class="text-slider">
-                <div>مؤسسة فلاح الحلو للعقارات</div>
-                <div>خبرة موثوقة في وساطة العقار</div>
-                <div>حلول استثمارية بمعايير عالمية</div>
+                <div style="text-shadow: 2px 2px 8px #000;">مؤسسة فلاح الحلو للعقارات</div>
+                <div style="text-shadow: 2px 2px 8px #000;">خبرة موثوقة في وساطة العقار</div>
+                <div style="text-shadow: 2px 2px 8px #000;">حلول استثمارية بمعايير عالمية</div>
             </div>
-            <p style="font-size: 1.2rem; max-width: 800px; line-height: 1.8; margin-top: 20px;">نحن بوابتك الرسمية للاستثمار العقاري في الرياض، نجمع بين المصداقية والاحترافية لتقديم أفضل العروض.</p>
+            <p style="font-size: 1.3rem; max-width: 800px; line-height: 1.8; margin-top: 20px; z-index: 2; text-shadow: 1px 1px 5px #000;">نحن بوابتك الرسمية للاستثمار العقاري في الرياض، نجمع بين المصداقية والاحترافية لتقديم أفضل العروض.</p>
             <div class="social-icons">
                 <a href="https://www.tiktok.com/@fhanzi200" target="_blank"><i class="fab fa-tiktok"></i></a>
                 <a href="https://www.snapchat.com/add/fhanzi200" target="_blank"><i class="fab fa-snapchat"></i></a>
@@ -94,62 +141,20 @@
         <h2 class="section-title">عن مؤسسة فلاح الحلو</h2>
         <div class="info-box">
             <h3>من نحن</h3>
-            <p>مؤسسة فلاح الحلو هليل العنزي للوساطة العقارية، كيان سعودي مرخص يهدف لتطوير السوق العقاري في الرياض من خلال تقديم خدمات نوعية تتسم بالشفافية العالية.</p>
+            <p>مؤسسة فلاح الحلو هليل العنزي للوساطة العقارية، كيان سعودي مرخص...</p>
             <hr style="border-color: #444; margin: 20px 0;">
-            <p><strong>الاسم الرسمي:</strong> فلاح الحلو هليل العنزي</p>
             <p><strong>رقم السجل التجاري:</strong> 7053453341</p>
             <p><strong>رقم ترخيص فال:</strong> 682010</p>
-            <p><strong>تاريخ التوثيق:</strong> 21/01/2026</p>
-        </div>
-        <div class="card" style="background: transparent; border: none; text-align: center;">
-             <p style="font-size: 1.3rem;">نلتزم بتقديم وساطة عقارية آمنة تحت إشراف نخبة من الخبراء لضمان حقوق كافة الأطراف.</p>
         </div>
     </section>
 
     <section id="services" class="page">
         <h2 class="section-title">خدماتنا العقارية المتكاملة</h2>
         <div class="services-grid">
-            
-            <div class="service-card">
-                <i class="fas fa-calendar-alt"></i>
-                <h3>حلول الإيجار</h3>
-                <ul>
-                    <li>إيجار يومي (وحدات مفروشة)</li>
-                    <li>إيجار أسبوعي وشهري</li>
-                    <li>إيجار سنوي (سكني وتجاري)</li>
-                </ul>
-            </div>
-
-            <div class="service-card">
-                <i class="fas fa-landmark"></i>
-                <h3>بيع الأراضي والبيوت</h3>
-                <ul>
-                    <li>بيع وشراء الأراضي السكنية</li>
-                    <li>بيع الفلل والبيوت الجاهزة</li>
-                    <li>تسويق المشاريع العقارية</li>
-                </ul>
-            </div>
-
-            <div class="service-card">
-                <i class="fas fa-balance-scale"></i>
-                <h3>التوثيق القانوني</h3>
-                <ul>
-                    <li>عقود عبر مكتب محاماة معتمد</li>
-                    <li>توثيق العقود الرسمية</li>
-                    <li>الاستشارات القانونية العقارية</li>
-                </ul>
-            </div>
-
-            <div class="service-card">
-                <i class="fas fa-tools"></i>
-                <h3>التطوير والاستثمار</h3>
-                <ul>
-                    <li>استشارات استثمارية متخصصة</li>
-                    <li>إعادة تقسيم الوحدات لرفع العائد</li>
-                    <li>إدارة وتطوير الأملاك العقارية</li>
-                </ul>
-            </div>
-
+            <div class="service-card"><i class="fas fa-calendar-alt"></i><h3>حلول الإيجار</h3><ul><li>إيجار يومي</li><li>أسبوعي وشهري</li><li>سنوي</li></ul></div>
+            <div class="service-card"><i class="fas fa-landmark"></i><h3>بيع الأراضي</h3><ul><li>أراضي سكنية</li><li>فلل وبيوت</li><li>مشاريع</li></ul></div>
+            <div class="service-card"><i class="fas fa-balance-scale"></i><h3>التوثيق القانوني</h3><ul><li>عقود رسمية</li><li>محاماة معتمدة</li><li>استشارات</li></ul></div>
+            <div class="service-card"><i class="fas fa-tools"></i><h3>التطوير</h3><ul><li>استشارات استثمارية</li><li>إعادة تقسيم</li><li>إدارة أملاك</li></ul></div>
         </div>
     </section>
 
@@ -157,10 +162,10 @@
         <div class="form-card">
             <h3 style="text-align: center; color: var(--gold); margin-bottom: 25px;">تواصل معنا لطلب خدمة</h3>
             <form action="https://formspree.io/f/mojepqzq" method="POST">
-                <input type="text" name="name" placeholder="الاسم الكامل" required oninput="this.value=this.value.replace(/[0-9]/g,'')">
-                <input type="tel" name="phone" placeholder="رقم الجوال (05XXXXXXXX)" required pattern="^05[0-9]{8}$" maxlength="10">
+                <input type="text" name="name" placeholder="الاسم الكامل" required>
+                <input type="tel" name="phone" placeholder="رقم الجوال (05XXXXXXXX)" required>
                 <input type="email" name="email" placeholder="بريدك الإلكتروني" required>
-                <textarea name="message" rows="4" placeholder="ما هي الخدمة المطلوبة؟" required></textarea>
+                <textarea name="message" rows="4" placeholder="الخدمة المطلوبة..." required></textarea>
                 <button type="submit" class="btn">إرسال الطلب</button>
             </form>
         </div>
